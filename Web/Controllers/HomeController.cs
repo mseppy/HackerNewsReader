@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Models.Interfaces;
+using System.Diagnostics;
 using Web.Models;
 
 namespace Web.Controllers
@@ -12,10 +9,11 @@ namespace Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IStoryService storyService;
+        public HomeController(ILogger<HomeController> logger, IStoryService storyService)
         {
             _logger = logger;
+            this.storyService = storyService;
         }
 
         public IActionResult Index()
@@ -25,6 +23,12 @@ namespace Web.Controllers
 
         public IActionResult Privacy()
         {
+            return View();
+        }
+
+        public IActionResult GetTopStories()
+        {
+            var stories = storyService.GetTopStoriesAsync(50);
             return View();
         }
 

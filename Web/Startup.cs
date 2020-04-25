@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Models;
+using Models.Interfaces;
 
 namespace Web
 {
@@ -26,7 +26,7 @@ namespace Web
             services.AddHttpClient<HackerNewsAPI>("hackerNews", api => { api.BaseAddress = new Uri(Configuration["HackerNewBaseUrl"]); });
 
             // Register classes
-            services.AddTransient<IRepository, HackerNewsAPI>(); ;
+            services.AddTransient<IStoryRepository, HackerNewsAPI>(); ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

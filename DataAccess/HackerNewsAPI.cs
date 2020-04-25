@@ -1,28 +1,39 @@
-﻿using Models;
+﻿using Models.Interfaces;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace DataAccess
 {
-    public class HackerNewsAPI : IRepository
+    public class HackerNewsAPI : IStoryRepository
     {
         readonly HttpClient httpClient;
+        IHttpClientFactory clientFactory; 
 
-
-        public HackerNewsAPI(HttpClient client)
+        public HackerNewsAPI(IHttpClientFactory clientFactory)
         {
-            httpClient = client;
+            this.clientFactory = clientFactory;
+            httpClient = this.clientFactory.CreateClient();
         }
 
 
-        async Task<int> GetMaxId()
+        public async Task<List<string>> GetTopStoriesAsync(int count = 50)
         {
-            var response = await httpClient.GetAsync("maxitem.json");
+            return await Get<List<string>>("topstories.json");
+        }
+        public async Task<int> GetMaxIdAsync()
+        {
+            return await Get<int>("maxitem.json");
+        }
+
+        private async Task<TValue> Get<TValue>(string endpoint)
+        {
+            var response = await httpClient.GetAsync(endpoint);
             response.EnsureSuccessStatusCode();
 
             var responseStream = await response.Content.ReadAsStreamAsync();
-            return await JsonSerializer.DeserializeAsync<int>(responseStream);
+            return await JsonSerializer.DeserializeAsync<TValue>(responseStream);
         }
     }
 }
