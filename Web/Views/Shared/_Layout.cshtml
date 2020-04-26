@@ -3,15 +3,20 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Hacker New Reader</title>
+    <link href="https://news.ycombinator.com/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <title>@ViewData["Title"] - Hacker News Reader</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body>
+<body class="background">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Web</a>
+                <div class="col-3">
+                    <img src="https://d1l6icgp8w0hse.cloudfront.net/assets/ycdc/ycombinator-logo-7481412385fe6d0f7d4a3339d90fe12309432ca41983e8d350b232301d5d8684.png"
+                         height="40" width="40" style="margin-right:1rem" />
+                    <a class="navbar-brand primary" asp-area="" asp-controller="Home" asp-action="Index">Hacker News</a>
+                </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -19,10 +24,13 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">New</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="GetTop">Top</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="GetBest">Best</a>
                         </li>
                     </ul>
                 </div>
@@ -35,9 +43,12 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - Hacker New Reader - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer text-muted" style="border-top:1px solid rgb(194, 78, 0)">
+        <div class="container text-center">
+            &copy; 2020 - <a href="https://www.linkedin.com/in/morgan-seppy-8235705" target="new">Morgan Seppy</a>
+            ✵ Powered by <a href="https://github.com/HackerNews/API" target="new">Hacker News API</a>
+            ✵ Commissioned by
+            <a href="https://www.nextech.com/" target="new" title="Nextech"><img src="https://www.nextech.com/hubfs/assets/images/content/nextech-logo.svg" height="14" width="83" /></a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -1,25 +1,20 @@
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Extensions.Logging;
-using Moq;
-using Web.Controllers;
-using Microsoft.AspNetCore.Mvc.ViewFeatures.Buffers;
-using Microsoft.AspNetCore.Mvc;
-using Web.Models;
-using System.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using System;
 using Models.Interfaces;
+using Moq;
 using Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace UnitTests
 {
     [TestClass]
     public class StoryServiceTests
     {
-        IStoryService storyService;
+        readonly StoryService storyService;
 
-        Mock<ILogger<StoryService>> moqLogger = new Mock<ILogger<StoryService>>();
-        Mock<IStoryRepository> moqRepo = new Mock<IStoryRepository>();
+        readonly Mock<ILogger<StoryService>> moqLogger = new Mock<ILogger<StoryService>>();
+        readonly Mock<IStoryRepository> moqRepo = new Mock<IStoryRepository>();
 
         public StoryServiceTests()
         {
@@ -30,39 +25,65 @@ namespace UnitTests
 
 
         [TestMethod]
+        public void GetTopStories_NegativePassed_LogErrorReturnNothing()
+        {
+            // Arrange
+            moqRepo.Setup(r => r.GetTopStoriesAsync(It.IsAny<int>())).ReturnsAsync(new List<string>());
+
+            // Act
+            var result = storyService.GetTopStoriesAsync(-24);
+
+            //Assert
+            Assert.AreEqual(TaskStatus.RanToCompletion, result.Status);
+            var actual = result.Result;
+            Assert.IsNotNull(actual, "Nothing returned.");
+            Assert.AreEqual(0, actual.Count, "Actual count is different than expected.");
+        }
+
+        [TestMethod]
         public void GetTopStories_NullPassed_ReturnsDefault()
         {
             // Arrange
+            var testStories = GenerateTestStories(storyService.DefaultItemsPerPage);
+            moqRepo.Setup(r => r.GetTopStoriesAsync(It.IsAny<int>())).ReturnsAsync(testStories);
 
             // Act
-            var actual = storyService.GetTopStoriesAsync(null);
+            var result = storyService.GetTopStoriesAsync(null);
 
             //Assert
-            Assert.IsNotNull(actual, "Nothing returned.");
+            Assert.AreEqual(TaskStatus.RanToCompletion, result.Status);
+            var actual = result.Result;
+            Assert.AreEqual(storyService.DefaultItemsPerPage, actual.Count, "Actual count different than expected.");
         }
 
         [TestMethod]
         public void GetTopStories_ValidNumberPassed_Returns()
         {
             // Arrange
-            
+            const int storyCount = 2;
+            var testStories = GenerateTestStories(2);
+            moqRepo.Setup(r => r.GetTopStoriesAsync(It.IsAny<int>())).ReturnsAsync(testStories);
 
             // Act
-            var actual = storyService.GetTopStoriesAsync(2);
+            var result = storyService.GetTopStoriesAsync(storyCount);
 
             //Assert
-            Assert.IsNotNull(actual, "Nothing returned.");
-            //Assert.AreEqual(typeof(ViewResult), actual, "Type returned is not a view");
+            Assert.AreEqual(TaskStatus.RanToCompletion, result.Status);
+            var actual = result.Result;
+            Assert.AreEqual(storyCount, actual.Count, "Actual count different than expected.");
         }
 
-        [TestMethod]
-        public void GetTopStories_NegativePassed_LogErrorReturnNothing()
+
+        #region Test Helpers
+        private List<string> GenerateTestStories(int count)
         {
-            // Act
-            var actual = storyService.GetTopStoriesAsync(-24);
-
-            //Assert
-            Assert.IsNotNull(actual, "Nothing returned.");
+            var stories = new List<string>();
+            for (var x = 0; x < count; x++)
+            {
+                stories.Add(x.ToString());
+            }
+            return stories;
         }
+        #endregion
     }
 }

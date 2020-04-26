@@ -5,6 +5,8 @@ namespace Models.Interfaces
 {
     public interface IStoryRepository
     {
-        Task<List<string>> GetTopStoriesAsync(int count);
+        Task<List<Story>> GetNewStoriesAsync(int count);
+        Task<List<Story>> GetTopStoriesAsync(int count);
+        Task<List<Story>> GetBestStoriesAsync(int count);
     }
 }

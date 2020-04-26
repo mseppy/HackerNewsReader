@@ -1,12 +1,12 @@
-using System;
-using DataAccess;
+﻿using DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Models.Interfaces;
+using Services;
+using System;
 
 namespace Web
 {
@@ -26,7 +26,8 @@ namespace Web
             services.AddHttpClient<HackerNewsAPI>("hackerNews", api => { api.BaseAddress = new Uri(Configuration["HackerNewBaseUrl"]); });
 
             // Register classes
-            services.AddTransient<IStoryRepository, HackerNewsAPI>(); ;
+            services.AddTransient<IStoryRepository, HackerNewsAPI>();
+            services.AddTransient<IStoryService, StoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
