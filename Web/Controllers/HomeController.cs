@@ -87,7 +87,11 @@ namespace Web.Controllers
             {
                 return Math.Round(age.Days / 7.0, 0) + " weeks ago";
             }
-            if (age.Days > 1 && age.Days < 2)
+            if (age.Days > 1)
+            {
+                return age.Days + " days ago";
+            }
+            if (age.Days >= 1 && age.Days < 2)
             {
                 return "yesterday";
             }

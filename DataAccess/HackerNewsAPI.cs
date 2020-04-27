@@ -12,7 +12,7 @@ namespace DataAccess
     public class HackerNewsAPI : IStoryRepository
     {
         readonly HttpClient httpClient;
-        IHttpClientFactory clientFactory;
+        readonly IHttpClientFactory clientFactory;
 
         public HackerNewsAPI(IHttpClientFactory clientFactory)
         {
@@ -75,6 +75,7 @@ namespace DataAccess
         {
             return new Story
             {
+                StoryID = story.Id,
                 Title = story.Title,
                 Url = story.Url,
                 UserName = story.By,

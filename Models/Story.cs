@@ -4,7 +4,7 @@ namespace Models
 {
     public class Story
     {
-        public string StoryID { get; set; }
+        public int StoryID { get; set; }
         public string Type { get; set; }
         public string Title { get; set; }
         public string Url { get; set; }
